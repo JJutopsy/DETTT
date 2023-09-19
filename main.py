@@ -11,7 +11,7 @@ class WindowClass(QMainWindow, form_class):
         self.setupUi(self)
         self.setMinimumSize(800, 600) 
         self.setWindowTitle('문서이메일탈탈털기툴')
-        self.setWindowIcon(QIcon('icon.png'))   
+        self.setWindowIcon(QIcon('./res/icon.png'))   
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
