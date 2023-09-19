@@ -23,11 +23,13 @@
      <height>21</height>
     </rect>
    </property>
-   <widget class="QMenu" name="menu">
+   <widget class="QMenu" name="menu_F">
     <property name="title">
      <string>파일 (F)</string>
     </property>
     <addaction name="separator"/>
+    <addaction name="actionnew_2"/>
+    <addaction name="actionopen"/>
    </widget>
    <widget class="QMenu" name="menu_S">
     <property name="title">
@@ -39,7 +41,7 @@
      <string>도움말 (H)</string>
     </property>
    </widget>
-   <addaction name="menu"/>
+   <addaction name="menu_F"/>
    <addaction name="menu_S"/>
    <addaction name="menu_H"/>
   </widget>
@@ -47,6 +49,19 @@
   <action name="actionnew">
    <property name="text">
     <string>new</string>
+   </property>
+  </action>
+  <action name="actionnew_2">
+   <property name="text">
+    <string>new</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+W</string>
+   </property>
+  </action>
+  <action name="actionopen">
+   <property name="text">
+    <string>open</string>
    </property>
   </action>
  </widget>
