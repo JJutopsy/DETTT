@@ -15,6 +15,7 @@ class WindowClass(QMainWindow, form_class):
         self.setWindowIcon(QIcon('./res/icon.png'))
 
         self.actionopen.triggered.connect(self.open_file_dialog)
+        self.actionnew_2.triggered.connect(self.select_folder)
 
     def open_file_dialog(self):
         options = QFileDialog.Options()
@@ -26,6 +27,12 @@ class WindowClass(QMainWindow, form_class):
         if file_name:
             print("Selected file path:", file_name)
 
+    def select_folder(self):
+        folder_dialog = QFileDialog()
+        folder_path = folder_dialog.getExistingDirectory(self, "Select Folder")
+
+        if folder_path:
+            print("Selected folder path:", folder_path)
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     myWindow = WindowClass()

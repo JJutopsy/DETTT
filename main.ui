@@ -63,6 +63,9 @@
    <property name="text">
     <string>open</string>
    </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
   </action>
  </widget>
  <resources/>
