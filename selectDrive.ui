@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Create New Case</string>
+   <string>Select Drive or Folder</string>
   </property>
   <widget class="QDialogButtonBox" name="button_box">
    <property name="geometry">
@@ -27,42 +27,6 @@
    </property>
    <property name="standardButtons">
     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-   </property>
-  </widget>
-  <widget class="QLabel" name="case_name_label">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>30</y>
-     <width>81</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Case Name  : </string>
-   </property>
-  </widget>
-  <widget class="QLineEdit" name="case_name_input">
-   <property name="geometry">
-    <rect>
-     <x>120</x>
-     <y>40</y>
-     <width>385</width>
-     <height>20</height>
-    </rect>
-   </property>
-  </widget>
-  <widget class="QLabel" name="label_2">
-   <property name="geometry">
-    <rect>
-     <x>20</x>
-     <y>90</y>
-     <width>81</width>
-     <height>41</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Select Folder :</string>
    </property>
   </widget>
   <widget class="QLineEdit" name="folder_input">
@@ -86,6 +50,45 @@
    </property>
    <property name="text">
     <string>Select</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="folder_radio">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>100</y>
+     <width>90</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>local folder</string>
+   </property>
+  </widget>
+  <widget class="QRadioButton" name="drive_radio">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>40</y>
+     <width>101</width>
+     <height>20</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>external drive</string>
+   </property>
+  </widget>
+  <widget class="QComboBox" name="drive_combo">
+   <property name="geometry">
+    <rect>
+     <x>120</x>
+     <y>40</y>
+     <width>384</width>
+     <height>20</height>
+    </rect>
    </property>
   </widget>
  </widget>
