@@ -122,7 +122,7 @@ class WindowClass(QMainWindow, form_class):
         options |= QFileDialog.ReadOnly 
 
         file_dialog = QFileDialog()
-        file_name, _ = file_dialog.getOpenFileName(self, "Open File", "", "Text Files (*.jut);;All Files (*)", options=options)
+        file_name, _ = file_dialog.getOpenFileName(self, "Open File", "", "Text Files (*.case);;All Files (*)", options=options)
 
         if file_name:
             print("Selected file path:", file_name)

@@ -62,7 +62,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>local folder</string>
+    <string>folder</string>
    </property>
   </widget>
   <widget class="QRadioButton" name="drive_radio">
@@ -78,7 +78,7 @@
     </rect>
    </property>
    <property name="text">
-    <string>external drive</string>
+    <string>drive</string>
    </property>
   </widget>
   <widget class="QComboBox" name="drive_combo">
