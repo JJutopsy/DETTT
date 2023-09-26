@@ -2,8 +2,10 @@ import sys
 from PyQt5 import uic
 import psutil
 import modules.docx_parser
+import dbConnector
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QFileDialog, QDialog, QDialogButtonBox, QVBoxLayout, QButtonGroup
 from PyQt5.QtGui import QIcon
+from datetime import datetime
 
 form_class = uic.loadUiType("./uis/main.ui")[0]
 newCase_class = uic.loadUiType("./uis/newCase.ui")[0]
@@ -106,6 +108,7 @@ class WindowClass(QMainWindow, form_class):
 
         self.actionnew_2.triggered.connect(self.show_case_input_dialog)
         self.actionopen.triggered.connect(self.open_case_dialog)
+
     def show_case_input_dialog(self):
         case_input_dialog = CaseInputDialog()
         result = case_input_dialog.exec_()
@@ -113,8 +116,24 @@ class WindowClass(QMainWindow, form_class):
         if result == QDialog.Accepted:
             case_name = case_input_dialog.case_name_input.text()
             folder_path = case_input_dialog.folder_input.text()
+            case_info = case_input_dialog.case_info_input.toPlainText()
+            user_name = case_input_dialog.user_name_input.text()
+            user_info = case_input_dialog.user_info_input.text()
+            created_at = datetime.now()
+            case_data = {"case_name":case_name,
+                         "case_path":folder_path,
+                         "case_description":case_info,
+                         "investigator_name":user_name,
+                         "investigator_info":user_info}
             print(f"Case Name: {case_name}")
             print(f"Selected Folder: {folder_path}")
+            print(f"Case Info: {case_info}")
+            print(f"Investgator Name : {user_name}")
+            print(f"Investagor Info : {user_info}")
+            print(f"create at : {created_at}")
+            db = dbConnector.CaseDatabase("./db/cases")
+            db.create_cases_table()
+            db.insert_case(case_data)
             case_select_dialog = CaseSelectDialog()
             result = case_select_dialog.exec_()
 
@@ -123,7 +142,7 @@ class WindowClass(QMainWindow, form_class):
         options |= QFileDialog.ReadOnly 
 
         file_dialog = QFileDialog()
-        file_name, _ = file_dialog.getOpenFileName(self, "Open File", "", "Text Files (*.case);;All Files (*)", options=options)
+        file_name, _ = file_dialog.getOpenFileName(self, "Open File", "", "Text Files (*.db);;All Files (*)", options=options)
 
         if file_name:
             print("Selected file path:", file_name)
