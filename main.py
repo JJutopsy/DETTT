@@ -11,6 +11,7 @@ form_class = uic.loadUiType("./uis/main.ui")[0]
 newCase_class = uic.loadUiType("./uis/newCase.ui")[0]
 selectDrive_class = uic.loadUiType("./uis/selectDrive.ui")[0]
 
+# 입력 데이터 선택 ui 
 class CaseSelectDialog(QDialog, selectDrive_class):
     def __init__(self):
         super().__init__()
@@ -41,6 +42,7 @@ class CaseSelectDialog(QDialog, selectDrive_class):
     
         self.drive_combo.addItems(drives)
     def drive_radio_clicked(self):
+        self.button_box.button(QDialogButtonBox.Ok).setEnabled(True)
         if self.drive_radio.isChecked():
             self.drive_combo.setEnabled(True)
             self.folder_input.setEnabled(False)
@@ -51,15 +53,26 @@ class CaseSelectDialog(QDialog, selectDrive_class):
             self.folder_input.setEnabled(True)
 
     def folder_radio_clicked(self):
+        self.check_inputs()
         if self.folder_radio.isChecked():
             self.drive_combo.setEnabled(False)
+
     def select_folder(self):
+        
         folder_dialog = QFileDialog()
         folder_path = folder_dialog.getExistingDirectory(self, "Select Folder")
 
         if folder_path:
             self.folder_input.setText(folder_path)
+        self.check_inputs()
             
+
+    def check_inputs(self):
+        folder_path = self.folder_input.text()
+        self.button_box.button(QDialogButtonBox.Ok).setEnabled(bool(folder_path))
+
+    def accept(self):
+        super().accept()        
 
 class CaseInputDialog(QDialog, newCase_class):
     def __init__(self):
@@ -131,11 +144,15 @@ class WindowClass(QMainWindow, form_class):
             print(f"Investgator Name : {user_name}")
             print(f"Investagor Info : {user_info}")
             print(f"create at : {created_at}")
-            db = dbConnector.CaseDatabase("./db/cases")
-            db.create_cases_table()
-            db.insert_case(case_data)
+           
             case_select_dialog = CaseSelectDialog()
-            result = case_select_dialog.exec_()
+            result = case_select_dialog.exec()
+            if result == 1:
+                input_path = case_select_dialog.drive_combo.currentText().split(" ")[0] if case_select_dialog.drive_radio.isChecked() else case_select_dialog.folder_input.text()
+                print(f"인풋 파일 디렉토리 :  {input_path}")
+                db = dbConnector.CaseDatabase("./db/cases")
+                db.create_cases_table()
+                db.insert_case(case_data)
 
     def open_case_dialog(self):
         options = QFileDialog.Options()
