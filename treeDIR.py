@@ -2,7 +2,7 @@ import os
 import sqlite3
 
 # 검색할 디렉토리 경로 설정
-start_dir = 'C:\\Users\\dswhd\OneDrive\\문서\\디포 자료\\행복의류 증거데이터 v0811'  # 원하는 디렉토리 경로로 변경하세요.
+start_dir = 'C:\\'  # 원하는 디렉토리 경로로 변경하세요.
 full_path = os.path.dirname(start_dir)
 # 찾을 확장자 리스트
 extensions_to_find = ['.pdf', '.eml', '.docx', '.xlsx']
