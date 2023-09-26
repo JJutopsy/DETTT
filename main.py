@@ -1,6 +1,7 @@
 import sys
 from PyQt5 import uic
 import psutil
+import modules.docx_parser
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QFileDialog, QDialog, QDialogButtonBox, QVBoxLayout, QButtonGroup
 from PyQt5.QtGui import QIcon
 
@@ -130,6 +131,7 @@ class WindowClass(QMainWindow, form_class):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     myWindow = WindowClass()
-
+    modules.docx_parser.DocxParser("")
     myWindow.show()
     app.exec_()
+    
