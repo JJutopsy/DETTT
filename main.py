@@ -5,9 +5,9 @@ import modules.docx_parser
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QFileDialog, QDialog, QDialogButtonBox, QVBoxLayout, QButtonGroup
 from PyQt5.QtGui import QIcon
 
-form_class = uic.loadUiType("./main.ui")[0]
-newCase_class = uic.loadUiType("./newCase.ui")[0]
-selectDrive_class = uic.loadUiType("./selectDrive.ui")[0]
+form_class = uic.loadUiType("./uis/main.ui")[0]
+newCase_class = uic.loadUiType("./uis/newCase.ui")[0]
+selectDrive_class = uic.loadUiType("./uis/selectDrive.ui")[0]
 
 class CaseSelectDialog(QDialog, selectDrive_class):
     def __init__(self):
