@@ -1,6 +1,8 @@
 import sqlite3
 from datetime import datetime
 
+
+
 class CaseDatabase:
     def __init__(self, database_name):
         self.database_name = database_name
