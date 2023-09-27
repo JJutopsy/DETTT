@@ -150,7 +150,7 @@ class WindowClass(QMainWindow, form_class):
             if result == 1:
                 input_path = case_select_dialog.drive_combo.currentText().split(" ")[0] if case_select_dialog.drive_radio.isChecked() else case_select_dialog.folder_input.text()
                 print(f"인풋 파일 디렉토리 :  {input_path}")
-                db = dbConnector.CaseDatabase("./db/cases")
+                db = dbConnector.CaseDatabase("./db/cases.sqlite ")
                 db.create_cases_table()
                 db.insert_case(case_data)
 
