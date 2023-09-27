@@ -3,3 +3,5 @@ PyQt5-Qt5==5.15.2
 PyQt5-sip==12.12.2
 PyQt5Designer==5.14.1 
 psutil
+tika==2.6.0
+pywin32 == 306
