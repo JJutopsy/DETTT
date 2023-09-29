@@ -47,7 +47,7 @@ class PSTParser:
         return self.emails
 
 if __name__ == "__main__":
-    pst_file_path = r"C:\Users\xyg19\OneDrive\바탕 화면\백업JISOOLEE.pst"
+    pst_file_path = r"C:\Users\dswhd\OneDrive\문서\디포 자료\행복의류 증거데이터 v0811\구매팀_이지수(과장)\C\HB\Documents\Outlook 파일\백업JISOOLEE.pst"
     output_folder = "extracted_emails"
     parser = PSTParser(pst_file_path)
     emails = parser.extract_emails(output_folder)

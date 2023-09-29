@@ -15,6 +15,25 @@ class CaseDatabase:
         if self.conn:
             self.conn.close()
 
+    def create_files_table(self):
+        self.connect()
+        cursor = self.conn.cursor()
+
+        create_table_query = """
+        CREATE TABLE IF NOT EXISTS dir_parse (
+        file_id INTEGER PRIMARY KEY NOT NULL,
+        file_path TEXT,
+        file_hash TEXT,
+        file_modified TIMESTAMP,
+        file_access TIMESTAMP,
+        file_creation TIMESTAMP
+        );
+        """
+
+        cursor.execute(create_table_query)
+        self.conn.commit()
+        self.conn.close()
+
     def create_cases_table(self):
         self.connect()
         cursor = self.conn.cursor()
@@ -33,6 +52,37 @@ class CaseDatabase:
         cursor.execute(create_table_query)
         self.conn.commit()
         self.disconnect()
+    def insert_dir(self, dir_data):
+        self.connect()
+        cursor = self.conn.cursor()
+
+        file_path = dir_data['file_path']
+        file_hash = dir_data['file_hash']
+        file_modified = dir_data['file_modified']
+        file_access = dir_data['file_access']
+        file_creation = dir_data['file_creation']
+
+        insert_query = """
+        INSERT INTO dir_parse (
+            file_path, 
+            file_hash, 
+            file_modified, 
+            file_access, 
+            file_creation)
+        VALUES (?, ?, ?, ?, ?);
+        """
+        cursor.execute(insert_query, (
+            file_path,
+            file_hash,
+            file_modified,
+            file_access,
+            file_creation
+        ))
+        
+        self.conn.commit()
+        self.disconnect()
+        
+        
 
     def insert_case(self, case_data):
         self.connect()

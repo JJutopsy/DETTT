@@ -153,7 +153,7 @@ class WindowClass(QMainWindow, form_class):
                 db = dbConnector.CaseDatabase("./db/cases.sqlite ")
                 db.create_cases_table()
                 db.insert_case(case_data)
-
+                
     def open_case_dialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.ReadOnly 
