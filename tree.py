@@ -21,8 +21,7 @@ class FileTreeView(QMainWindow):
         self.treeView = QTreeView()
         layout.addWidget(self.treeView)
         
-        # SQLite3 데이터베이스 연결
-        self.conn = sqlite3.connect('file_path.db')  
+        self.conn = sqlite3.connect('files.sqlite')  
         self.cursor = self.conn.cursor()
         
 
@@ -30,12 +29,12 @@ class FileTreeView(QMainWindow):
         
         self.model = QStandardItemModel()
         self.populate_treeview()
-        
+ 
         self.treeView.setModel(self.model)
 
     def populate_treeview(self):
         for row in self.cursor.fetchall():
-            file_path = row[0]
+            file_path = row[0]  
            
             self.add_path_to_treeview(file_path)
 

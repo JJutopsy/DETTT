@@ -16,7 +16,7 @@ class DatabaseViewer(QMainWindow):
 
         # SQLite 데이터베이스 연결
         self.db = QSqlDatabase.addDatabase("QSQLITE")
-        self.db.setDatabaseName("./db/cases.sqlite")  # 데이터베이스 파일명을 수정하세요.
+        self.db.setDatabaseName("./db/cases.sqlite") 
         if not self.db.open():
             print("Database connection failed")
             sys.exit(1)

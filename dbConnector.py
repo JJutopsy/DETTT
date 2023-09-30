@@ -52,6 +52,7 @@ class CaseDatabase:
         cursor.execute(create_table_query)
         self.conn.commit()
         self.disconnect()
+
     def insert_dir(self, dir_data):
         self.connect()
         cursor = self.conn.cursor()
