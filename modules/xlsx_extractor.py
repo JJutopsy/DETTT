@@ -1,6 +1,5 @@
 import xml.etree.ElementTree as ET
 import zipfile
-import io  # io 모듈을 추가
 
 # XLSXExtractor 클래스
 class XLSXExtractor:
@@ -8,18 +7,22 @@ class XLSXExtractor:
     TEXT = NAMESPACE + 't'
     SHARED_STRINGS = 'xl/sharedStrings.xml'
 
-    def __init__(self, file_data):  # filename을 file_data로 변경
-        self._file_data = file_data  # filename을 file_data로 변경
+    def __init__(self, filename):
+        self._filename = filename
         self.text = self._get_text()
 
     def _get_text(self):
-        # filename을 file_data로 변경하고, zipfile.ZipFile의 인수를 io.BytesIO(file_data)로 변경
-        document = zipfile.ZipFile(io.BytesIO(self._file_data))
+        document = zipfile.ZipFile(self._filename)
         xml_content = document.read(self.SHARED_STRINGS).decode()
         document.close()
-        tree = ET.fromstring(xml_content)
+        tree = ET.fromstring(xml_content)  # 수정: ET.fromstring 사용
         texts = [node.text for node in tree.findall('.//' + self.TEXT) if node.text]
         return '\n'.join(texts)
 
     def get_text(self):
         return self.text
+
+
+def get_text(filename):
+    xlsx = XLSXExtractor(filename)
+    print(xlsx.get_text())

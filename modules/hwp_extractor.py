@@ -2,7 +2,6 @@ import olefile
 import zlib
 import struct
 import re
-import io  # io 모듈 추가
 
 # HWPExtractor 클래스
 class HWPExtractor:
@@ -12,19 +11,19 @@ class HWPExtractor:
     BODYTEXT_SECTION = "BodyText"
     HWP_TEXT_TAGS = [67]
 
-    def __init__(self, file_data):
-        self._ole = self.load(file_data)
+    def __init__(self, filename):
+        self._ole = self.load(filename)
         self._dirs = self._ole.listdir()
 
         self._valid = self.is_valid(self._dirs)
-        if not self._valid:
-            raise Exception("Not a valid HwpFile")
+        if (self._valid == False):
+            raise Exception("Not Valid HwpFile")
         
         self._compressed = self.is_compressed(self._ole)
         self.text = self._get_text()
 
-    def load(self, file_data):
-        return olefile.OleFileIO(io.BytesIO(file_data))  # io.BytesIO를 사용하여 바이트 데이터를 파일처럼 처리
+    def load(self, filename):
+        return olefile.OleFileIO(filename)
 
     def is_valid(self, dirs):
         if [self.FILE_HEADER_SECTION] not in dirs:
@@ -89,4 +88,3 @@ class HWPExtractor:
 
 def get_text(filename):
     hwp = HWPExtractor(filename) 
-    print(hwp.get_text())
