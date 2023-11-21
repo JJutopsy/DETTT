@@ -1,13 +1,17 @@
 import sys
 from PyQt5 import uic
 import psutil
+import modules.docx_parser
+import dbConnector
 from PyQt5.QtWidgets import QApplication, QMainWindow, QAction, QFileDialog, QDialog, QDialogButtonBox, QVBoxLayout, QButtonGroup
 from PyQt5.QtGui import QIcon
+from datetime import datetime
 
-form_class = uic.loadUiType("./main.ui")[0]
-newCase_class = uic.loadUiType("./newCase.ui")[0]
-selectDrive_class = uic.loadUiType("./selectDrive.ui")[0]
+form_class = uic.loadUiType("./uis/main.ui")[0]
+newCase_class = uic.loadUiType("./uis/newCase.ui")[0]
+selectDrive_class = uic.loadUiType("./uis/selectDrive.ui")[0]
 
+# 입력 데이터 선택 ui 
 class CaseSelectDialog(QDialog, selectDrive_class):
     def __init__(self):
         super().__init__()
@@ -38,6 +42,7 @@ class CaseSelectDialog(QDialog, selectDrive_class):
     
         self.drive_combo.addItems(drives)
     def drive_radio_clicked(self):
+        self.button_box.button(QDialogButtonBox.Ok).setEnabled(True)
         if self.drive_radio.isChecked():
             self.drive_combo.setEnabled(True)
             self.folder_input.setEnabled(False)
@@ -48,15 +53,26 @@ class CaseSelectDialog(QDialog, selectDrive_class):
             self.folder_input.setEnabled(True)
 
     def folder_radio_clicked(self):
+        self.check_inputs()
         if self.folder_radio.isChecked():
             self.drive_combo.setEnabled(False)
+
     def select_folder(self):
+        
         folder_dialog = QFileDialog()
         folder_path = folder_dialog.getExistingDirectory(self, "Select Folder")
 
         if folder_path:
             self.folder_input.setText(folder_path)
+        self.check_inputs()
             
+
+    def check_inputs(self):
+        folder_path = self.folder_input.text()
+        self.button_box.button(QDialogButtonBox.Ok).setEnabled(bool(folder_path))
+
+    def accept(self):
+        super().accept()        
 
 class CaseInputDialog(QDialog, newCase_class):
     def __init__(self):
@@ -105,6 +121,7 @@ class WindowClass(QMainWindow, form_class):
 
         self.actionnew_2.triggered.connect(self.show_case_input_dialog)
         self.actionopen.triggered.connect(self.open_case_dialog)
+
     def show_case_input_dialog(self):
         case_input_dialog = CaseInputDialog()
         result = case_input_dialog.exec_()
@@ -112,17 +129,40 @@ class WindowClass(QMainWindow, form_class):
         if result == QDialog.Accepted:
             case_name = case_input_dialog.case_name_input.text()
             folder_path = case_input_dialog.folder_input.text()
+            case_info = case_input_dialog.case_info_input.toPlainText()
+            user_name = case_input_dialog.user_name_input.text()
+            user_info = case_input_dialog.user_info_input.text()
+            created_at = datetime.now()
+            case_data = {"case_name":case_name,
+                         "case_path":folder_path,
+                         "case_description":case_info,
+                         "investigator_name":user_name,
+                         "investigator_info":user_info}
             print(f"Case Name: {case_name}")
             print(f"Selected Folder: {folder_path}")
+            print(f"Case Info: {case_info}")
+            print(f"Investgator Name : {user_name}")
+            print(f"Investagor Info : {user_info}")
+            print(f"create at : {created_at}")
+           
             case_select_dialog = CaseSelectDialog()
-            result = case_select_dialog.exec_()
+            result = case_select_dialog.exec()
+            if result == 1:
+                input_path = case_select_dialog.drive_combo.currentText().split(" ")[0] if case_select_dialog.drive_radio.isChecked() else case_select_dialog.folder_input.text()
+                print(f"인풋 파일 디렉토리 :  {input_path}")
+                db = dbConnector.CaseDatabase("./db/cases.sqlite ")
+                db.create_cases_table()
+                db.insert_case(case_data)
 
+                db = dbConnector.CaseDatabase(folder_path+"/files.sqlite")
+                db.create_files_table()
+                
     def open_case_dialog(self):
         options = QFileDialog.Options()
         options |= QFileDialog.ReadOnly 
 
         file_dialog = QFileDialog()
-        file_name, _ = file_dialog.getOpenFileName(self, "Open File", "", "Text Files (*.case);;All Files (*)", options=options)
+        file_name, _ = file_dialog.getOpenFileName(self, "Open File", "", "Text Files (*.db);;All Files (*)", options=options)
 
         if file_name:
             print("Selected file path:", file_name)
@@ -130,6 +170,7 @@ class WindowClass(QMainWindow, form_class):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     myWindow = WindowClass()
-
+    modules.docx_parser.DocxParser("")
     myWindow.show()
     app.exec_()
+    

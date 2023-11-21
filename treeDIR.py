@@ -1,33 +1,40 @@
 import os
 import sqlite3
+import hashlib
+import time
 
-# 검색할 디렉토리 경로 설정
-start_dir = 'C:\\Users\\dswhd\OneDrive\\문서\\디포 자료\\행복의류 증거데이터 v0811'  # 원하는 디렉토리 경로로 변경하세요.
-full_path = os.path.dirname(start_dir)
-# 찾을 확장자 리스트
-extensions_to_find = ['.pdf', '.eml', '.docx', '.xlsx']
+start_dir = 'C:\\Users\\dswhd\\OneDrive\\문서\\디포 자료\\행복의류 증거데이터 v0811' 
+# full_path = os.path.dirname(start_dir)
 
-# SQLite3 데이터베이스 연결 및 테이블 생성
-conn = sqlite3.connect('file_path.db')  # 데이터베이스 파일명을 수정하세요.
+conn = sqlite3.connect('files.sqlite')  
 cursor = conn.cursor()
-cursor.execute('CREATE TABLE IF NOT EXISTS dirTest (file_path TEXT, full_path TEXT)')
+cursor.execute('CREATE TABLE IF NOT EXISTS dirTest (file_path TEXT, sha256 TEXT, created_time INTEGER, modified_time INTEGER, accessed_time INTEGER)')
 
-# 디렉토리 탐색 함수 정의
 def search_files(directory):
     for root, _, files in os.walk(directory):
         for file in files:
             file_path = os.path.join(root, file)
-            # 파일 확장자 확인
+          
             _, file_extension = os.path.splitext(file_path)
-            file_path = file_path[len(full_path)+1:]
             if file_extension.lower() in extensions_to_find:
-                # 데이터베이스에 파일 경로 저장
-                cursor.execute('INSERT INTO dirTest (file_path, full_path) VALUES (?, ?)', (file_path, full_path))
+             
+                sha256_hash = hashlib.sha256()
+                with open(file_path, "rb") as f:
+                  
+                    for byte_block in iter(lambda: f.read(4096), b""):
+                        sha256_hash.update(byte_block)
+                sha256 = sha256_hash.hexdigest()
+
+                created_time = os.path.getctime(file_path)
+                modified_time = os.path.getmtime(file_path)
+                accessed_time = os.path.getatime(file_path)
+
+     
+                cursor.execute('INSERT INTO dirTest (file_path, sha256, created_time, modified_time, accessed_time) VALUES (?, ?, ?, ?, ?)', (file_path, sha256, created_time, modified_time, accessed_time))
                 conn.commit()
                 print(f'파일: {file_path}')
 
-# 디렉토리 탐색 시작
-search_files(start_dir)
 
-# 데이터베이스 연결 닫기
+extensions_to_find = ['.pdf', '.eml', '.docx', '.xlsx']
+search_files(start_dir)
 conn.close()

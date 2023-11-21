@@ -88,4 +88,3 @@ class HWPExtractor:
 
 def get_text(filename):
     hwp = HWPExtractor(filename) 
-    print(hwp.get_text())

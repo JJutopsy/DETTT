@@ -1,3 +1,4 @@
+
 import os
 import hashlib
 import sqlite3
@@ -108,3 +109,4 @@ process_files('C:\\Users\\xyg19\\OneDrive\\바탕 화면', whitelist_extensions,
 
 # DB 연결 종료
 conn.close()
+
